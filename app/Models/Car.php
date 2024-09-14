@@ -21,4 +21,22 @@ class Car extends Model
     {
         return $this->hasOne(Reservation::class);
     }
+
+    public function getSearchedCars(array $parameters)
+    {
+        $type = $parameters["type"] ?? null;
+        $minPrice = $parameters["minPrice"] ?? 0;
+        $maxPrice = $parameters["maxPrice"] ?? PHP_INT_MAX;
+        $brand = $parameters["brand"] ?? null;
+        $fuelType = $parameters["fuelType"] ?? null;
+
+        return $this->when($type, function ($q) use ($type){
+            $q->where('type', $type);
+        })->when($fuelType, function ($q) use ($fuelType){
+            $q->where('fuelType', $fuelType);
+        })->whereBetween('price',[$minPrice, $maxPrice])
+          ->when($brand, function ($q) use ($brand){
+                $q->where('brand', $brand);
+            })->get();
+    }
 }
