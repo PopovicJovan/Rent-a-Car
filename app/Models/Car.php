@@ -17,7 +17,7 @@ class Car extends Model
         'image'
     ];
 
-    public function reservations(): HasOne
+    public function reservation(): HasOne
     {
         return $this->hasOne(Reservation::class);
     }
@@ -38,5 +38,14 @@ class Car extends Model
           ->when($brand, function ($q) use ($brand){
                 $q->where('brand', $brand);
             })->get();
+    }
+
+    public function isAvailableCar(string $startDate, string $endDate)
+    {
+        $reservation = $this->reservation()->first();
+        if(!$reservation) return true;
+        $available = !(($startDate <= $reservation->start_date and $endDate >= $reservation->end_date)
+                        or ($startDate >= $reservation->start_date and $endDate <= $reservation->end_date));
+        return $available;
     }
 }
