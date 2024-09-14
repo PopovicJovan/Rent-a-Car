@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function show(Request $request, User $user)
+    public function show(User $user)
     {
         $user = new UserResource($user);
         return response()->json(["data"  => $user]);
