@@ -44,8 +44,7 @@ class Car extends Model
     {
         $reservation = $this->reservation()->first();
         if(!$reservation) return true;
-        $available = !(($startDate <= $reservation->start_date and $endDate >= $reservation->end_date)
-                        or ($startDate >= $reservation->start_date and $endDate <= $reservation->end_date));
+        $available = ($endDate <= $reservation->start_date or $startDate >= $reservation->end_date);
         return $available;
     }
 }
