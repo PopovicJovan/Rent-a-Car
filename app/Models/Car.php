@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Car extends Model
@@ -17,9 +18,9 @@ class Car extends Model
         'image'
     ];
 
-    public function reservation(): HasOne
+    public function reservations(): HasMany
     {
-        return $this->hasOne(Reservation::class);
+        return $this->hasMany(Reservation::class);
     }
 
     public function getSearchedCars(array $parameters)
@@ -42,9 +43,12 @@ class Car extends Model
 
     public function isAvailableCar(string $startDate, string $endDate)
     {
-        $reservation = $this->reservation()->first();
-        if(!$reservation) return true;
-        $available = ($endDate <= $reservation->start_date or $startDate >= $reservation->end_date);
-        return $available;
+        $reservations = $this->reservations()->get();
+        if(!$reservations) return true;
+        foreach ($reservations as $reservation){
+            $available = ($endDate <= $reservation->start_date or $startDate >= $reservation->end_date);
+            if (!$available) return false;
+        }
+        return true;
     }
 }
