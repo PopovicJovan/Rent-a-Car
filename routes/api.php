@@ -31,5 +31,5 @@ Route::resource('/car', CarController::class)->only(['index', 'show']);
 Route::post('/car/{car}/is-available', [CarController::class, 'isCarAvailable']);
 
 Route::resource('/reservation', ReservationController::class)
-    ->only(['store', 'index'])->middleware('auth:sanctum');
+    ->only(['store', 'index', 'destroy'])->middleware('auth:sanctum');
 Route::post('/reservation/get-price',[ ReservationController::class, 'getPrice']);

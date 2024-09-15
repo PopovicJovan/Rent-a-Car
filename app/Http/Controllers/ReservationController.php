@@ -57,4 +57,27 @@ class ReservationController extends Controller
         ]);
     }
 
+    public function destroy(Request $request, Reservation $reservation)
+    {
+        $user = $request->user();
+        if($reservation->user_id != $user->id){
+            return response()->json([], 403);
+        }
+
+        $reservationStartDate = Carbon::parse($reservation->start_date);
+        $dayDiff = Carbon::today()->diffInDays($reservationStartDate);
+
+        if($dayDiff <= 2 and $reservationStartDate->isFuture()){
+            return response()->json([
+                "message" => "Reservation can be cancelled at least 48h before"
+            ]);
+        }
+
+        $reservation->delete();
+
+        return response()->json([
+            "message" => "Reservation is successfully cancelled"
+        ]);
+    }
+
 }
