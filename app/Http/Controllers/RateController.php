@@ -1,0 +1,34 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Car;
+use App\Models\Rate;
+use App\Models\Reservation;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+
+class RateController extends Controller
+{
+    public function store(Request $request, Reservation $reservation)
+    {
+        $user = $request->user();
+        if($user->id != $reservation->user_id){
+            return response()->json([], 403);
+        }
+
+        if(!Carbon::parse($reservation->startDate)->isPast()){
+            return response()->json([], 400);
+        }
+        $request->validate(["rate" => "integer|min:1|max:5"]);
+
+        Rate::create([
+            "reservation_id" => $reservation->id,
+            "rate" => $request->rate
+        ]);
+
+        return response()->json([
+            "message" => "Rate is successfully created"
+        ], 201);
+    }
+}
