@@ -28,6 +28,7 @@ Route::post('/logout', [AuthController::class, 'destroy'])->middleware('auth:san
 
 
 Route::resource('/car', CarController::class)->only(['index', 'show']);
+Route::post('/car/{car}/is-available', [CarController::class, 'isCarAvailable']);
 
 Route::resource('/reservation', ReservationController::class)
     ->only(['store', 'index'])->middleware('auth:sanctum');
