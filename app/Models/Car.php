@@ -41,14 +41,24 @@ class Car extends Model
             })->get();
     }
 
+    public function getAvailableSearchedCars(array $parameters)
+    {
+        $cars = $this->getSearchedCars($parameters);
+
+        $startDate = $parameters["startDate"];
+        $endDate = $parameters["endDate"];
+
+        return $cars->filter(function ($car) use($startDate, $endDate){
+            return $car->isAvailableCar($startDate, $endDate);
+        });
+    }
+
     public function isAvailableCar(string $startDate, string $endDate)
     {
-        $reservations = $this->reservations()->get();
-        if(!$reservations) return true;
-        foreach ($reservations as $reservation){
-            $available = ($endDate <= $reservation->start_date or $startDate >= $reservation->end_date);
-            if (!$available) return false;
-        }
-        return true;
+        return !($this->reservations()
+            ->where(function ($query) use ($startDate, $endDate){
+                $query->where('start_date', '<', $endDate)
+                    ->where('end_date', '>', $startDate);
+            })->exists());
     }
 }

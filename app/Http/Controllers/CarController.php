@@ -12,8 +12,13 @@ class CarController extends Controller
 {
     public function index(Request $request)
     {
-        $parameters = $request->only(['brand', 'fuelType', 'minPrice', 'maxPrice', 'type']);
-        $cars = (new Car())->getSearchedCars($parameters);
+        if(!$request->input("available")){
+            $parameters = $request->only(['brand', 'fuelType', 'minPrice', 'maxPrice', 'type']);
+            $cars = (new Car())->getSearchedCars($parameters);
+        }else{
+            $parameters = $request->only(['brand', 'fuelType', 'minPrice', 'maxPrice', 'type', "startDate", "endDate"]);
+            $cars = (new Car())->getAvailableSearchedCars($parameters);
+        }
         return response()->json([
             "data" => new CarCollection($cars)
         ]);
