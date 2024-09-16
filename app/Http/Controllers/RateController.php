@@ -20,15 +20,15 @@ class RateController extends Controller
         if(!Carbon::parse($reservation->startDate)->isPast()){
             return response()->json([], 400);
         }
-        $request->validate(["rate" => "integer|min:1|max:5"]);
+        $request->validate(["rate" => "sometimes|integer|min:1|max:5"]);
 
-        Rate::create([
-            "reservation_id" => $reservation->id,
-            "rate" => $request->rate
-        ]);
+        Rate::updateOrCreate(
+            ["reservation_id" => $reservation->id],
+            ["rate" => $request->rate]
+        );
 
         return response()->json([
-            "message" => "Rate is successfully created"
+            "message" => "Rate is successfully created/updated"
         ], 201);
     }
 }
