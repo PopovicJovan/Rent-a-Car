@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Car extends Model
 {
@@ -23,7 +23,7 @@ class Car extends Model
         return $this->hasMany(Reservation::class);
     }
 
-    public function getSearchedCars(array $parameters)
+    public function getSearchedCars(array $parameters): Collection
     {
         $type = $parameters["type"] ?? null;
         $minPrice = $parameters["minPrice"] ?? 0;
@@ -41,7 +41,7 @@ class Car extends Model
             })->get();
     }
 
-    public function getAvailableSearchedCars(array $parameters)
+    public function getAvailableSearchedCars(array $parameters): Collection
     {
         $cars = $this->getSearchedCars($parameters);
 
@@ -53,12 +53,20 @@ class Car extends Model
         });
     }
 
-    public function isAvailableCar(string $startDate, string $endDate)
+    public function isAvailableCar(string $startDate, string $endDate): bool
     {
         return !($this->reservations()
             ->where(function ($query) use ($startDate, $endDate){
                 $query->where('start_date', '<', $endDate)
                     ->where('end_date', '>', $startDate);
             })->exists());
+    }
+
+    public function getAvgRate(): float
+    {
+        $avg =  $this->reservations()->with('rate')
+            ->get()->pluck('rate.rate')->avg();
+
+        return round($avg, 2);
     }
 }

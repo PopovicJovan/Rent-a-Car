@@ -23,8 +23,9 @@ class RateController extends Controller
         $request->validate(["rate" => "sometimes|integer|min:1|max:5"]);
 
         Rate::updateOrCreate(
-            ["reservation_id" => $reservation->id],
-            ["rate" => $request->rate]
+            ["reservation_id" => $reservation->id,],
+            ["rate" => $request->rate,
+             "reservation_id" => $reservation->id]
         );
 
         return response()->json([

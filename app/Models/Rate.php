@@ -10,6 +10,7 @@ class Rate extends Model
 {
     use HasFactory;
 
+    protected $fillable = ["reservation_id", "rate"];
     public function reservation(): BelongsTo
     {
         return $this->belongsTo(Reservation::class);
