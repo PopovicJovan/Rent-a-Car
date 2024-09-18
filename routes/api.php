@@ -20,12 +20,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::resource('/car', Admin\CarController::class)
-    ->only(['store', 'update', 'destroy'])
-    ->middleware(['auth:sanctum', 'is-admin']);
 
+
+Route::resource('/user', Admin\UserController::class)
+    ->only(['index', 'destroy'])->middleware(['auth:sanctum', 'is-admin']);
 Route::resource('/user', UserController::class)
-    ->middleware('auth:sanctum')
+    ->middleware(['auth:sanctum'])
     ->only(['show', 'update']);
 
 Route::post('/register', [RegisterController::class, 'store']);
@@ -35,6 +35,9 @@ Route::post('/logout', [AuthController::class, 'destroy'])->middleware('auth:san
 
 Route::resource('/car', CarController::class)->only(['index', 'show']);
 Route::post('/car/{car}/is-available', [CarController::class, 'isCarAvailable']);
+Route::resource('/car', Admin\CarController::class)
+    ->only(['store', 'update', 'destroy'])
+    ->middleware(['auth:sanctum', 'is-admin']);
 
 Route::resource('/reservation', ReservationController::class)
     ->only(['store', 'index', 'destroy'])->middleware('auth:sanctum');
