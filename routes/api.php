@@ -41,6 +41,6 @@ Route::resource('/car', Admin\CarController::class)
 
 Route::resource('/reservation', ReservationController::class)
     ->only(['store', 'index', 'destroy'])->middleware('auth:sanctum');
-Route::post('/reservation/get-price',[ ReservationController::class, 'getPrice']);
+Route::post('/reservation/{car}/get-price',[ ReservationController::class, 'getPrice']);
 
 Route::post('/reservation/{reservation}', [RateController::class, 'store'])->middleware('auth:sanctum');
