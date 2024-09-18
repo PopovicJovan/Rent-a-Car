@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignIdFor(\App\Models\Reservation::class)
                 ->constrained()->onDelete('cascade');
             $table->integer('rate');
+            $table->text('comment')->nullable();
             $table->timestamps();
         });
     }
