@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\RateController;
+use App\Http\Controllers\Admin;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,6 +19,10 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+Route::resource('/car', Admin\CarController::class)
+    ->only(['store', 'update', 'destroy'])
+    ->middleware(['auth:sanctum', 'is-admin']);
 
 Route::resource('/user', UserController::class)
     ->middleware('auth:sanctum')
