@@ -43,9 +43,13 @@ class ReservationController extends Controller
         ]);
     }
 
-    public function getPrice(Request $request)
+    public function getPrice(Request $request, Car $car)
     {
-        $carPrice = Car::find($request->carId)->price;
+        $carPrice = $car->price;
+        $request->validate([
+            "startDate" => "required|date|after:". Carbon::today(),
+            "endDate" => "required|date|after:startDate"
+        ]);
         $startDate = Carbon::parse($request->startDate);
         $endDate = Carbon::parse($request->endDate);
         $days = $startDate->diffInDays($endDate);
