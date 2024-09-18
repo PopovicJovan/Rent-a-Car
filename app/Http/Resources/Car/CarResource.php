@@ -21,7 +21,8 @@ class CarResource extends JsonResource
             "description" => $this->description,
             "price" => $this->price,
             "type" => $this->type,
-            "image" => $this->image
+            "image" => $this->image,
+            "avgRate" => $this->getAvgRate()
         ];
     }
 }

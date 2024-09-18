@@ -4,6 +4,8 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CarController;
+use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\RateController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,3 +29,10 @@ Route::post('/logout', [AuthController::class, 'destroy'])->middleware('auth:san
 
 
 Route::resource('/car', CarController::class)->only(['index', 'show']);
+Route::post('/car/{car}/is-available', [CarController::class, 'isCarAvailable']);
+
+Route::resource('/reservation', ReservationController::class)
+    ->only(['store', 'index', 'destroy'])->middleware('auth:sanctum');
+Route::post('/reservation/get-price',[ ReservationController::class, 'getPrice']);
+
+Route::post('/reservation/{reservation}', [RateController::class, 'store'])->middleware('auth:sanctum');
