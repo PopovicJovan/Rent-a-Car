@@ -43,6 +43,10 @@ class Car extends Model
 
     public function getAvailableSearchedCars(array $parameters): Collection
     {
+        request()->validate([
+            'startDate' => 'required|date',
+            'endDate' => 'required|date|after:startDate'
+        ]);
         $cars = $this->getSearchedCars($parameters);
 
         $startDate = $parameters["startDate"];
