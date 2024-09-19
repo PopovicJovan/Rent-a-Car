@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -45,7 +46,7 @@ class Car extends Model
     public function getAvailableSearchedCars(array $parameters): Collection
     {
         request()->validate([
-            'startDate' => 'required|date',
+            'startDate' => 'required|date|after:'. Carbon::today(),
             'endDate' => 'required|date|after:startDate'
         ]);
         $cars = $this->getSearchedCars($parameters);
