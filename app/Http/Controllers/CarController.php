@@ -34,7 +34,7 @@ class CarController extends Controller
     public function isCarAvailable(Request $request, Car $car)
     {
         $request->validate([
-            "startDate" => "required|date|after:" . Carbon::today(),
+            "startDate" => "required|date|after:" . Carbon::now()->addHours(24),
             "endDate" => "required|date|after:startDate"
         ]);
 

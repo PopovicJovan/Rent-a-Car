@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Faker\Provider\FakeCar;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -17,12 +18,14 @@ class CarFactory extends Factory
      */
     public function definition(): array
     {
+        $this->faker->addProvider(new FakeCar($this->faker));
+        $vehicle = $this->faker->vehicleArray();
         return [
-            'type' => $this->faker->word,
-            'brand' => $this->faker->word,
-            'price' => $this->faker->numberBetween(10000, 50000),
+            'type' => $this->faker->vehicleType,
+            'brand' => $vehicle['brand'],
+            'price' => $this->faker->numberBetween(1, 300),
             'description' => $this->faker->paragraph,
-            'fuelType' => $this->faker->word,
+            'fuelType' => $this->faker->vehicleFuelType,
             'image' => Str::random(10)
         ];
     }

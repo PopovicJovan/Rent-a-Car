@@ -47,16 +47,16 @@ class ReservationController extends Controller
     {
         $carPrice = $car->price;
         $request->validate([
-            "startDate" => "required|date|after:". Carbon::today(),
+            "startDate" => "required|date|after:". Carbon::now()->addHours(24),
             "endDate" => "required|date|after:startDate"
         ]);
         $startDate = Carbon::parse($request->startDate);
         $endDate = Carbon::parse($request->endDate);
-        $days = $startDate->diffInDays($endDate);
+        $hours = $startDate->diffInHours($endDate);
 
         return response()->json([
             "data" => [
-                "price" => $carPrice*$days
+                "price" => ($carPrice/24)*$hours
             ]
         ]);
     }
@@ -69,9 +69,9 @@ class ReservationController extends Controller
         }
 
         $reservationStartDate = Carbon::parse($reservation->start_date);
-        $dayDiff = Carbon::today()->diffInDays($reservationStartDate);
+        $hourDiff = Carbon::now()->diffInHours($reservationStartDate, false);
 
-        if($dayDiff <= 2 and $reservationStartDate->isFuture()){
+        if($hourDiff <= 48){
             return response()->json([
                 "message" => "Reservation can be cancelled at least 48h before"
             ]);
