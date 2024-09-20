@@ -4,6 +4,7 @@ namespace App\Http\Resources\Car;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class CarResource extends JsonResource
 {
@@ -21,7 +22,10 @@ class CarResource extends JsonResource
             "description" => $this->description,
             "price" => $this->price,
             "type" => $this->type,
-            "image" => $this->image,
+            "image" => base64_encode(
+                Storage::disk('public')
+                    ->get("images/cars/$this->image.jpg")
+            ),
             "avgRate" => $this->getAvgRate()
         ];
     }

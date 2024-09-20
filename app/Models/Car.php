@@ -20,8 +20,12 @@ class Car extends Model
         'id', 'type',
         'brand', 'price',
         'description', 'fuelType',
-        'image'
+        'image', 'status'
     ];
+
+    const AVAILABLE = 'available';
+    const RESERVED = 'reserved';
+    const UNUSABLE = 'unusable';
 
     public function reservations(): HasMany
     {
@@ -80,7 +84,7 @@ class Car extends Model
 
     public function getAvgRate(): float
     {
-        $avg =  $this->reservations()->with('rate')
+        $avg = $this->reservations()->with('rate')
             ->get()->pluck('rate.rate')->avg();
 
         return round($avg, 2);

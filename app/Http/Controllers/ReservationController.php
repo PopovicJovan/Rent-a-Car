@@ -12,15 +12,15 @@ class ReservationController extends Controller
 {
     public function store(CreateReservationRequest $request)
     {
-        $request->validated();
+//        $request->validated();
 
-        if (!Car::find($request->carId)
-                ->isAvailableCar(...$request->only(['startDate', 'endDate'])))
-        {
-            return response()->json([
-                "message" => "Selected car is not available for that dates"
-            ]);
-        }
+//        if (!Car::find($request->carId)
+//                ->isAvailableCar(...$request->only(['startDate', 'endDate'])))
+//        {
+//            return response()->json([
+//                "message" => "Selected car is not available for that dates"
+//            ]);
+//        }
 
         Reservation::create([
             'user_id' => $request->user()->id,

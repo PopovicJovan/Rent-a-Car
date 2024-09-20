@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Car;
 
+use App\Models\Car;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateCarRequest extends FormRequest
 {
@@ -27,6 +29,7 @@ class UpdateCarRequest extends FormRequest
             'price' => 'sometimes|int|min:0',
             'description' => 'sometimes|string',
             'fuelType' => 'sometimes|string',
+            'status' => ['sometimes', 'string', Rule::in([Car::AVAILABLE, Car::RESERVED, Car::UNUSABLE])],
             'image' => 'sometimes|image'
         ];
     }

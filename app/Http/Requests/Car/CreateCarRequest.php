@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Car;
 
+use App\Models\Car;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class CreateCarRequest extends FormRequest
 {
@@ -27,6 +29,7 @@ class CreateCarRequest extends FormRequest
             'price' => 'required|int|min:0',
             'description' => 'required|string',
             'fuelType' => 'required|string',
+            'status' => ['sometimes', 'string', Rule::in([Car::AVAILABLE, Car::RESERVED, Car::UNUSABLE])],
             'image' => 'required|image'
         ];
     }
