@@ -26,7 +26,8 @@ class CreateCarRequest extends FormRequest
             'brand' => 'required|string',
             'price' => 'required|int|min:0',
             'description' => 'required|string',
-            'fuelType' => 'required|string'
+            'fuelType' => 'required|string',
+            'image' => 'required|image'
         ];
     }
 }

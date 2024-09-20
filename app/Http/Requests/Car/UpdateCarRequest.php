@@ -26,7 +26,8 @@ class UpdateCarRequest extends FormRequest
             'brand' => 'sometimes|string',
             'price' => 'sometimes|int|min:0',
             'description' => 'sometimes|string',
-            'fuelType' => 'sometimes|string'
+            'fuelType' => 'sometimes|string',
+            'image' => 'sometimes|image'
         ];
     }
 }

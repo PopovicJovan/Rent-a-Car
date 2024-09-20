@@ -51,7 +51,8 @@ Route::group(['middleware' => ['auth:sanctum', 'is-admin']], function() {
     Route::get('/user/{user}/reservation', [Admin\ReservationController::class, 'getReservationsForUser']);
 
     // Admin Car Routes
-    Route::resource('/car', Admin\CarController::class)->only(['store', 'update', 'destroy']);
+    Route::resource('/car', Admin\CarController::class)->only(['store', 'destroy']);
+    Route::post('/car/{car}', [Admin\CarController::class, 'update']);
 
     // Admin Reservation Routes
     Route::get('/reservation-all', [Admin\ReservationController::class, 'index']);
