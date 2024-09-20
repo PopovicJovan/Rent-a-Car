@@ -17,7 +17,7 @@ class RateController extends Controller
             return response()->json([], 403);
         }
 
-        if(!Carbon::parse($reservation->startDate)->isPast()){
+        if(!Carbon::parse($reservation->endDate)->isPast()){
             return response()->json([], 400);
         }
         $request->validate([

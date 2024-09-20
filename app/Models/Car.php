@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Validator;
 
 class Car extends Model
 {
@@ -44,10 +45,6 @@ class Car extends Model
 
     public function getAvailableSearchedCars(array $parameters): Collection
     {
-        request()->validate([
-            'startDate' => 'required|date|after:'. Carbon::today(),
-            'endDate' => 'required|date|after:startDate'
-        ]);
         $cars = $this->getSearchedCars($parameters);
 
         $startDate = $parameters["startDate"];
@@ -60,6 +57,17 @@ class Car extends Model
 
     public function isAvailableCar(string $startDate, string $endDate): bool
     {
+        $validator = Validator::make(
+            request()->only(['startDate', 'endDate']),
+            ["startDate" => "required|date|after:". Carbon::now()->addHours(24),
+            "endDate" => "required|date|after:startDate"]
+        );
+
+        if ($validator->fails()) return false;
+
+        $startDate = Carbon::parse($startDate)->subHours(24);
+        $endDate = Carbon::parse($endDate)->addHours(24);
+
         return !($this->reservations()
             ->where(function ($query) use ($startDate, $endDate){
                 $query->where('start_date', '<', $endDate)
