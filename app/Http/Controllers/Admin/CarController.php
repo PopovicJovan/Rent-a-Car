@@ -19,6 +19,7 @@ class CarController extends Controller
      */
     public function store(CreateCarRequest $request)
     {
+        $request->validated();
         $parameters = $request->only([
             "type", "brand", "price",
             "description", "fuelType",
@@ -65,6 +66,7 @@ class CarController extends Controller
      */
     public function update(UpdateCarRequest $request, Car $car)
     {
+      $request->validated();
       $parameters = $request->only([
             "type", "brand", "price",
             "description", "fuelType",

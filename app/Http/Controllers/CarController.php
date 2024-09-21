@@ -33,11 +33,11 @@ class CarController extends Controller
     /**
      * Return the specified car.
      *
-     * @param  \Illuminate\Http\Request  $request
+     *
      * @param  \App\Models\Car  $car
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Request $request, Car $car)
+    public function show(Car $car)
     {
         return response()->json([
             "data" => new CarResource($car)
