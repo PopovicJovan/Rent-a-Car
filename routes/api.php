@@ -38,13 +38,13 @@ Route::post('/car/{car}/is-available', [CarController::class, 'isCarAvailable'])
 // Reservation routes
 Route::resource('/reservation', ReservationController::class)
     ->only(['store', 'index', 'destroy'])->middleware('auth:sanctum');
-Route::post('/reservation/{car}/get-price',[ ReservationController::class, 'getPrice']);
+Route::post('/car/{car}/reservation/get-price', [ReservationController::class, 'getPrice']);
 
 // Rate routes
-Route::post('/reservation/{reservation}', [RateController::class, 'store'])->middleware('auth:sanctum');
+Route::post('/reservation/{reservation}/rate', [RateController::class, 'store'])->middleware('auth:sanctum');
 
 // Admin Routes (with is-admin middleware)
-Route::group(['middleware' => ['auth:sanctum', 'is-admin']], function() {
+Route::group(['middleware' => ['auth:sanctum', 'is-admin'], 'prefix' => 'admin'], function() {
 
     // Admin User Routes
     Route::resource('/user', Admin\UserController::class)->only(['index', 'destroy']);
@@ -55,5 +55,5 @@ Route::group(['middleware' => ['auth:sanctum', 'is-admin']], function() {
     Route::post('/car/{car}', [Admin\CarController::class, 'update']);
 
     // Admin Reservation Routes
-    Route::get('/reservation-all', [Admin\ReservationController::class, 'index']);
+    Route::get('/reservation', [Admin\ReservationController::class, 'index']);
 });
