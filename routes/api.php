@@ -58,3 +58,6 @@ Route::group(['middleware' => ['auth:sanctum', 'is-admin'], 'prefix' => 'admin']
     // Admin Reservation Routes
     Route::get('/reservation', [Admin\ReservationController::class, 'index']);
 });
+
+
+Route::post('/locations', [Admin\LocationController::class, 'websocket']);
