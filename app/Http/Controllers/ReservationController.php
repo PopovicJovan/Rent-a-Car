@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CreateReservationRequest;
+use App\Http\Resources\ReservationResource;
 use App\Models\Car;
 use App\Models\Reservation;
 use Carbon\Carbon;
@@ -51,8 +52,9 @@ class ReservationController extends Controller
     public function index(Request $request)
     {
         $reservations = $request->user()->reservations()->get();
+        $reservations = ReservationResource::collection($reservations);
         return response()->json([
-            "data" => $reservations
+                "data" => $reservations
         ]);
     }
 

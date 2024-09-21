@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\RateResource;
 use App\Models\Car;
 use App\Models\Rate;
 use App\Models\Reservation;
@@ -46,5 +47,20 @@ class RateController extends Controller
         return response()->json([
             "message" => "Rate is successfully created/updated"
         ], 201);
+    }
+
+    /**
+     * Return all reservations connected to specified car.
+     *
+     * @param \App\Models\User $car
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function index(Car $car)
+    {
+        $rates = $car->load('reservations.rate')->reservations->map->rate;
+        return response()->json([
+            "data" => RateResource::collection($rates)
+        ]);
+
     }
 }

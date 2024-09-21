@@ -42,6 +42,7 @@ Route::post('/car/{car}/reservation/get-price', [ReservationController::class, '
 
 // Rate routes
 Route::post('/reservation/{reservation}/rate', [RateController::class, 'store'])->middleware('auth:sanctum');
+Route::get('/car/{car}/rate', [RateController::class, 'index']);
 
 // Admin Routes (with is-admin middleware)
 Route::group(['middleware' => ['auth:sanctum', 'is-admin'], 'prefix' => 'admin'], function() {

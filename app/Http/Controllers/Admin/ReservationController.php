@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ReservationResource;
 use App\Models\Reservation;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -18,6 +19,7 @@ class ReservationController extends Controller
     public function index()
     {
         $reservations = Reservation::all();
+        $reservations = ReservationResource::collection($reservations);
         return response()->json([
             "data" => $reservations
         ]);
@@ -32,6 +34,7 @@ class ReservationController extends Controller
     public function getReservationsForUser(User $user)
     {
         $reservations = $user->reservations()->get();
+        $reservations = ReservationResource::collection($reservations);
         return response()->json([
             "data" => $reservations
         ]);
