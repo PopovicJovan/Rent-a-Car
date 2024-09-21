@@ -9,6 +9,13 @@ use Illuminate\Support\Facades\Hash;
 
 class RegisterController extends Controller
 {
+    /**
+     * Register a new user.
+     *
+     * @param  \App\Http\Requests\Auth\RegisterRequest  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+
     public function store(RegisterRequest $request)
     {
         $request->validated();

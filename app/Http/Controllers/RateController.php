@@ -10,6 +10,13 @@ use Illuminate\Http\Request;
 
 class RateController extends Controller
 {
+    /**
+     * Store a rating and optional comment for a reservation.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Reservation  $reservation
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(Request $request, Reservation $reservation)
     {
         $user = $request->user();

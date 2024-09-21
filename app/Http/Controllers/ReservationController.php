@@ -10,17 +10,24 @@ use Illuminate\Http\Request;
 
 class ReservationController extends Controller
 {
+    /**
+     * Create a new reservation for a car.
+     *
+     * @param  \App\Http\Requests\CreateReservationRequest  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+
     public function store(CreateReservationRequest $request)
     {
-//        $request->validated();
+        $request->validated();
 
-//        if (!Car::find($request->carId)
-//                ->isAvailableCar(...$request->only(['startDate', 'endDate'])))
-//        {
-//            return response()->json([
-//                "message" => "Selected car is not available for that dates"
-//            ]);
-//        }
+        if (!Car::find($request->carId)
+                ->isAvailableCar(...$request->only(['startDate', 'endDate'])))
+        {
+            return response()->json([
+                "message" => "Selected car is not available for that dates"
+            ]);
+        }
 
         Reservation::create([
             'user_id' => $request->user()->id,
@@ -35,6 +42,12 @@ class ReservationController extends Controller
 
     }
 
+    /**
+     * Return a collection of the user's reservations.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index(Request $request)
     {
         $reservations = $request->user()->reservations()->get();
@@ -43,6 +56,13 @@ class ReservationController extends Controller
         ]);
     }
 
+    /**
+     * Calculate the rental price for a car based on the given date range.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Car  $car
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getPrice(Request $request, Car $car)
     {
         $carPrice = $car->price;
@@ -61,6 +81,13 @@ class ReservationController extends Controller
         ]);
     }
 
+    /**
+     * Cancel a reservation for the authenticated user.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\Reservation  $reservation
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy(Request $request, Reservation $reservation)
     {
         $user = $request->user();

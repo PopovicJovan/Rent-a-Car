@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 
 class ReservationController extends Controller
 {
+    /**
+     * Return all reservations.
+     *
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index()
     {
         $reservations = Reservation::all();
@@ -17,6 +23,12 @@ class ReservationController extends Controller
         ]);
     }
 
+    /**
+     * Return all reservations connected to specified user.
+     *
+     * @param \App\Models\User $user
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getReservationsForUser(User $user)
     {
         $reservations = $user->reservations()->get();

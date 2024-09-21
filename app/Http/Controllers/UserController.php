@@ -8,12 +8,25 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    /**
+     * Return the specified user.
+     *
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function show(User $user)
     {
         $user = new UserResource($user);
         return response()->json(["data"  => $user]);
     }
 
+    /**
+     * Update the specified user's information.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\User  $user
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function update(Request $request, User $user)
     {
         if (!$request->user()->admin and $user->id != $request->user()->id){

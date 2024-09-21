@@ -7,6 +7,12 @@ use App\Models\User;
 
 class UserController extends Controller
 {
+    /**
+     * Return all users.
+     *
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function index()
     {
         $users = User::all();
@@ -15,9 +21,15 @@ class UserController extends Controller
         ]);
     }
 
+    /**
+     * Mark a user from the database as deleted.
+     *
+     * @param  \App\Models\User $user
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy(User $user)
     {
         $user->delete();
-        return response()->noContent();
+        return response()->json([], 204);
     }
 }

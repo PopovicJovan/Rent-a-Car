@@ -10,6 +10,12 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    /**
+     * Handle user login and token generation.
+     *
+     * @param  \App\Http\Requests\Auth\LoginRequest  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(LoginRequest $request)
     {
         $request->validated();
@@ -27,6 +33,12 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * Log the user out by deleting the current access token.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy(Request $request)
     {
         $token = $request->user()->currentAccessToken();
