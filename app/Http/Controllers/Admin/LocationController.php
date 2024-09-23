@@ -22,7 +22,7 @@ class LocationController extends Controller
             'longitude' => $request->longitude,
         ]));
 
-        return response()->isOk();
+        return response()->json();
     }
 
 }

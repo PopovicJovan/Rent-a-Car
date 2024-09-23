@@ -35,7 +35,7 @@ class RateController extends Controller
 
         $comment = $request->input('comment');
         if($reservation->rate()->exists() and !$request->comment){
-            $comment = $reservation->rate()->get('comment');
+            $comment = $reservation->rate()->get()->first()->comment;
         }
         Rate::updateOrCreate(
             ["reservation_id" => $reservation->id,],
