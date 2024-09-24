@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 
 class UserController extends Controller
@@ -16,6 +17,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
+        $users = UserResource::collection($users);
         return response()->json([
             "data" => $users
         ]);
