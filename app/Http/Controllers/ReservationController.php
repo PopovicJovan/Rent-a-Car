@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\InvoiceCreated;
 use App\Http\Requests\CreateReservationRequest;
 use App\Http\Resources\ReservationResource;
+use App\Mail\InvoiceMail;
 use App\Models\Car;
 use App\Models\Reservation;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ReservationController extends Controller
 {
@@ -21,22 +24,36 @@ class ReservationController extends Controller
     public function store(CreateReservationRequest $request)
     {
         $request->validated();
+        $car = Car::find($request->carId);
 
-        if (!Car::find($request->carId)
-                ->isAvailableCar(...$request->only(['startDate', 'endDate'])))
+        if (!$car->isAvailableCar(...$request->only(['startDate', 'endDate'])))
         {
             return response()->json([
                 "message" => "Selected car is not available for that dates"
             ]);
         }
 
-        Reservation::create([
+        $reservation = Reservation::create([
             'user_id' => $request->user()->id,
             'car_id' => $request->carId,
             'start_date' => $request->startDate,
             'end_date' => $request->endDate
         ]);
 
+        $price = (new Reservation())->calculatePrice($request, $car);
+        $hours = Carbon::parse($request->startDate)
+                    ->diffInHours(Carbon::parse($request->endDate));
+        $invoiceData = [
+            "user" => $request->user(),
+            "price" => $price,
+            "reservation" => $reservation,
+            "car" => $car,
+            "hours" => $hours
+        ];
+
+        if($reservation){
+            event(new InvoiceCreated($request->user(), $invoiceData));
+        }
         return response()->json([
             "message" => "Reservation is successfully created"
         ], 201);
@@ -67,18 +84,10 @@ class ReservationController extends Controller
      */
     public function getPrice(Request $request, Car $car)
     {
-        $carPrice = $car->price;
-        $request->validate([
-            "startDate" => "required|date|after:". Carbon::now()->addHours(24),
-            "endDate" => "required|date|after:startDate"
-        ]);
-        $startDate = Carbon::parse($request->startDate);
-        $endDate = Carbon::parse($request->endDate);
-        $hours = $startDate->diffInHours($endDate);
-
+        $price = (new Reservation())->calculatePrice($request, $car);
         return response()->json([
             "data" => [
-                "price" => ($carPrice/24)*$hours
+                "price" => $price
             ]
         ]);
     }

@@ -41,7 +41,7 @@
     <p>If you have any questions, feel free to reach out to us.</p>
 
     <div class="footer">
-        <p>Best regards,<br>Rnet a car company</p>
+        <p>Best regards,<br>Rent a car company</p>
     </div>
 </div>
 </body>
