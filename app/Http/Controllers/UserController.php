@@ -38,13 +38,17 @@ class UserController extends Controller
             "admin" => "sometimes|boolean"
         ]);
 
-        if ($request->input("name")) {
-            $user->name = $request->input('name');
+        $name = $request->input("name");
+        $admin = $request->input("admin");
+
+        if($user->id == $request->user()->id and $name != null)
+            $user->name = $name;
+
+
+        if($request->user()->admin and $user->admin != 1 and $admin != null){
+            $user->admin = $admin;
         }
 
-        if($request->user()->admin and $request->input("admin") and !$user->admin){
-            $user->admin = $request->input("admin");
-        }
 
         $user->save();
         return response()->json([], 204);
