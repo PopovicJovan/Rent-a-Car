@@ -16,10 +16,7 @@ class Admin
     public function handle(Request $request, Closure $next): Response
     {
         $user = $request->user();
-        if($user && $user->admin ){
-            return $next($request);
-        }
-
-        return response()->json(["message" => "Unauthorized"], 403);
+        if($user && $user->admin ) return $next($request);
+        return response()->json([], 403);
     }
 }

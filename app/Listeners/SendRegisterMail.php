@@ -2,11 +2,11 @@
 
 namespace App\Listeners;
 
-use App\Events\InvoiceCreated;
-use App\Mail\InvoiceMail;
+use App\Events\Register;
+use App\Mail\WelcomeEmail;
 use Illuminate\Support\Facades\Mail;
 
-class SendInvoiceMail
+class SendRegisterMail
 {
     /**
      * Create the event listener.
@@ -19,8 +19,8 @@ class SendInvoiceMail
     /**
      * Handle the event.
      */
-    public function handle(InvoiceCreated $event): void
+    public function handle(Register $event): void
     {
-        Mail::to($event->user->email)->send(new InvoiceMail($event->invoiceData));
+        Mail::to($event->user->email)->send(new WelcomeEmail($event->user));
     }
 }
