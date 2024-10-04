@@ -22,7 +22,7 @@ class CarResource extends JsonResource
             "description" => $this->description,
             "price" => $this->price,
             "type" => $this->type,
-            "image" => base64_encode(
+            "image" => "data:image/jpeg;base64,".base64_encode(
                 Storage::disk('public')
                     ->get("images/cars/$this->image.jpg")
             ),
