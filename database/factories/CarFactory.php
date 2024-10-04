@@ -26,7 +26,7 @@ class CarFactory extends Factory
             'price' => $this->faker->numberBetween(1, 300),
             'description' => $this->faker->paragraph,
             'fuelType' => $this->faker->vehicleFuelType,
-            'image' => Str::random(10)
+            'image' => "abc"
         ];
     }
 }
