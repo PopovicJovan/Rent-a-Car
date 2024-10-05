@@ -21,6 +21,41 @@ class UserController extends Controller
     }
 
     /**
+     * Return the current user.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function showProfile(Request $request)
+    {
+        $user = $request->user();
+        $user = new UserResource($user);
+        return response()->json(["data"  => $user]);
+    }
+
+    /**
+     * Update the current user's information.
+     *
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateProfile(Request $request)
+    {
+        $user = $request->user();
+
+        $request->validate(["name" => "sometimes|string|max:255"]);
+
+        $name = $request->input("name");
+
+        if($name != null)
+            $user->name = $name;
+            $user->save();
+
+        return response()->json([], 204);
+    }
+
+    /**
      * Update the specified user's information.
      *
      * @param  \Illuminate\Http\Request  $request
