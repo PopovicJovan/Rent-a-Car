@@ -27,7 +27,7 @@ Route::resource('/user', UserController::class)
     ->only(['show', 'update']);
 
 Route::get('/show-profile', [UserController::class, 'showProfile'])->middleware(['auth:sanctum']);
-Route::get('/update-profile', [UserController::class, 'updateProfile'])->middleware(['auth:sanctum']);
+Route::post('/update-profile', [UserController::class, 'updateProfile'])->middleware(['auth:sanctum']);
 
 // Auth routes
 Route::post('/register', [RegisterController::class, 'store']);
