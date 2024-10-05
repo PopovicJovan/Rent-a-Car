@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\Car\CarCollection;
 use App\Http\Resources\Car\CarResource;
 use App\Models\Car;
 use Carbon\Carbon;
@@ -26,7 +25,7 @@ class CarController extends Controller
             $cars = (new Car())->getAvailableSearchedCars($parameters);
         }
         return response()->json([
-            "data" => new CarCollection($cars)
+            "data" => CarResource::collection($cars)
         ]);
     }
 
