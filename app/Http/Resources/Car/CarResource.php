@@ -26,7 +26,8 @@ class CarResource extends JsonResource
                 Storage::disk('public')
                     ->get("images/cars/$this->image.jpg")
             ),
-            "avgRate" => $this->getAvgRate()
+            "avgRate" => $this->getAvgRate(),
+            "status" => $this->status
         ];
     }
 }

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -88,4 +91,94 @@ class UserController extends Controller
         $user->save();
         return response()->json([], 204);
     }
+
+    /**
+     * Update the current user's password.
+     *
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function changePassword(Request $request)
+    {
+        $request->validate([
+            "currentPassword" => "required",
+            "newPassword" => "required|confirmed"
+        ]);
+
+        $user = $request->user();
+        if(!Hash::check($request->input("currentPassword"), $user->password)){
+            return response()->json(["message" => "Wrong password"], 400);
+        }
+
+        $user->password = Hash::make($request->input("newPassword"));
+        $user->save();
+        $user->tokens()->delete();
+        return response()->json(["message" => "Password successfully updated"]);
+    }
+
+    /**
+     * Sent reset token to user
+     *
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function sendResetToken(Request $request)
+    {
+        $request->validate(['email' => 'required|email']);
+
+        $user = User::where('email', $request->input("email"))->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'No user found with this email'], 404);
+        }
+
+        $token = Str::random(60);
+
+        $user->forceFill([
+            'remember_token' => Hash::make($token),
+        ])->save();
+
+        Mail::raw("Your reset token is: {$token}", function ($message) use ($user) {
+            $message->to($user->email)
+                ->subject('Password Reset Token');
+        });
+
+        return response()->json(['message' => 'Reset token sent to your email.']);
+    }
+
+    /**
+     * Update the current user's forgotten password.
+     *
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function setNewPassword(Request $request)
+    {
+        $request->validate([
+            "email" => "required",
+            "token" => "required",
+            "newPassword" => "required|confirmed"
+        ]);
+
+        $user = User::where('email', $request->input("email"))->first();
+
+        if (!$user) {
+            return response()->json(['message' => 'No user found with this email'], 404);
+        }
+        if(!Hash::check($request->input("token"), $user->remember_token)){
+            return response()->json(["message" => "Invalid token"], 422);
+        }
+
+        $user->forceFill([
+            'password' => Hash::make($request->input("newPassword")),
+            'remember_token' => Str::random(60)
+        ])->save();
+        $user->tokens()->delete();
+        return response()->json(["message" => "Password successfully updated"]);
+    }
+
+
 }

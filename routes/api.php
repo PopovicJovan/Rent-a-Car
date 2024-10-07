@@ -28,6 +28,9 @@ Route::resource('/user', UserController::class)
 
 Route::get('/show-profile', [UserController::class, 'showProfile'])->middleware(['auth:sanctum']);
 Route::post('/update-profile', [UserController::class, 'updateProfile'])->middleware(['auth:sanctum']);
+Route::post('/change-password', [UserController::class, 'changePassword'])->middleware(['auth:sanctum']);
+Route::post('/forgot-password', [UserController::class, 'sendResetToken']);
+Route::post('/reset-password', [UserController::class, 'setNewPassword']);
 
 // Auth routes
 Route::post('/register', [RegisterController::class, 'store']);
