@@ -30,7 +30,10 @@ class UpdateCarRequest extends FormRequest
             'description' => 'sometimes|string',
             'fuelType' => 'sometimes|string',
             'status' => ['sometimes', 'string', Rule::in([Car::AVAILABLE, Car::RESERVED, Car::UNUSABLE])],
-            'image' => 'sometimes|image'
+            'image' => 'sometimes|image',
+            'gear' => 'sometimes|string',
+            'fuelConsumption' => 'sometimes|int',
+            'passengers' => 'sometimes|int'
         ];
     }
 }

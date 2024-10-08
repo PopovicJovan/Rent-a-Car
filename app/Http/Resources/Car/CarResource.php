@@ -27,7 +27,10 @@ class CarResource extends JsonResource
                     ->get("images/cars/$this->image.jpg")
             ),
             "avgRate" => $this->getAvgRate(),
-            "status" => $this->status
+            "status" => $this->status,
+            "gear" => $this->gear,
+            "passengers" => $this->passengers,
+            "fuelConsumption" => $this->fuelConsumption
         ];
     }
 }

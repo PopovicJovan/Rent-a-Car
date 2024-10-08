@@ -20,7 +20,10 @@ class Car extends Model
         'id', 'type',
         'brand', 'price',
         'description', 'fuelType',
-        'image', 'status'
+        'image', 'status',
+        'fuelConsumption',
+        'gear', 'passengers',
+        'fuelConsumption'
     ];
 
     const AVAILABLE = 'available';
@@ -39,9 +42,15 @@ class Car extends Model
         $maxPrice = $parameters["maxPrice"] ?? PHP_INT_MAX;
         $brand = $parameters["brand"] ?? null;
         $fuelType = $parameters["fuelType"] ?? null;
+        $gear = $parameters["gear"] ?? null;
+        $passengers = $parameters["passengers"] ?? null;
 
         return $this->when($type, function ($q) use ($type){
             $q->where('type', $type);
+        })->when($gear, function ($q) use ($gear){
+            $q->where('gear', $gear);
+        })->when($passengers, function ($q) use ($passengers){
+            $q->where('passengers', $passengers);
         })->when($fuelType, function ($q) use ($fuelType){
             $q->where('fuelType', $fuelType);
         })->whereBetween('price',[$minPrice, $maxPrice])

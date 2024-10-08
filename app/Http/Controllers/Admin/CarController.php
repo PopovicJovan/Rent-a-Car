@@ -23,7 +23,8 @@ class CarController extends Controller
         $parameters = $request->only([
             "type", "brand", "price",
             "description", "fuelType",
-            "status"
+            "status", "fuelConsumption",
+            "gear", "passengers"
         ]);
         $car = Car::create([
             ...$parameters,
@@ -70,7 +71,8 @@ class CarController extends Controller
       $parameters = $request->only([
             "type", "brand", "price",
             "description", "fuelType",
-            "status"
+            "status", "fuelConsumption",
+            "gear", "passengers"
       ]);
       if($request->hasFile('image')){
           $path = "images/cars/$car->image.jpg";
