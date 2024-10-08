@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -35,7 +36,7 @@ class Car extends Model
         return $this->hasMany(Reservation::class);
     }
 
-    public function getSearchedCars(array $parameters): Collection
+    public function getSearchedCars(array $parameters)
     {
         $type = $parameters["type"] ?? null;
         $minPrice = $parameters["minPrice"] ?? 0;
@@ -56,19 +57,19 @@ class Car extends Model
         })->whereBetween('price',[$minPrice, $maxPrice])
           ->when($brand, function ($q) use ($brand){
                 $q->where('brand', $brand);
-            })->get();
+            });
     }
 
-    public function getAvailableSearchedCars(array $parameters): Collection
+    public function getAvailableSearchedCars(array $parameters)
     {
-        $cars = $this->getSearchedCars($parameters);
+        $cars = $this->getSearchedCars($parameters)->get();
 
         $startDate = $parameters["startDate"];
         $endDate = $parameters["endDate"];
 
-        return $cars->filter(function ($car) use($startDate, $endDate){
+        return self::paginateCollection($cars->filter(function ($car) use($startDate, $endDate){
             return $car->isAvailableCar($startDate, $endDate);
-        });
+        }));
     }
 
     public function isAvailableCar(string $startDate, string $endDate): bool
@@ -97,5 +98,20 @@ class Car extends Model
             ->get()->pluck('rate.rate')->avg();
 
         return round($avg, 2);
+    }
+
+    public static function paginateCollection(Collection $items, $perPage = 6)
+    {
+        $page = request()->input('page', 1);
+        $total = $items->count();
+
+        $results = $items->forPage($page, $perPage);
+
+        return new LengthAwarePaginator(
+            $results,
+            $total,
+            $perPage,
+            $page
+        );
     }
 }
