@@ -20,7 +20,7 @@ class CarController extends Controller
         $base_parameters = ['brand', 'fuelType', 'minPrice', 'maxPrice', 'type', 'gear', 'passengers'];
         if(!$request->input("available")){
             $parameters = $request->only($base_parameters);
-            $cars = ((new Car())->getSearchedCars($parameters))->get();
+            $cars = ((new Car())->getSearchedCars($parameters))->paginate(6);
         }else{
             $parameters = $request->only([...$base_parameters, "startDate", "endDate"]);
             $cars = (new Car())->getAvailableSearchedCars($parameters);
