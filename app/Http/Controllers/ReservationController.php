@@ -68,7 +68,7 @@ class ReservationController extends Controller
      */
     public function index(Request $request)
     {
-        $reservations = $request->user()->reservations()->get();
+        $reservations = $request->user()->reservations()->with('rate')->get();
         $reservations = ReservationResource::collection($reservations);
         return response()->json([
                 "data" => $reservations
