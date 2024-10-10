@@ -19,7 +19,8 @@ class ReservationResource extends JsonResource
             "userId" => $this->user_id,
             "carId" => $this->car_id,
             "startDate" => $this->start_date,
-            "endDate" => $this->end_date
+            "endDate" => $this->end_date,
+            "rate" => $this->whenLoaded("rate")
         ];
     }
 }
