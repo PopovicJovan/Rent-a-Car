@@ -31,6 +31,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        if($user->admin) return response()->json([], 403);
         $user->delete();
         return response()->json([], 204);
     }
