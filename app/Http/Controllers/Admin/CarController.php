@@ -91,4 +91,5 @@ class CarController extends Controller
 
       return response()->json([], 204);
     }
+
 }

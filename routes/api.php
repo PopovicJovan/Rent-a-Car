@@ -65,5 +65,5 @@ Route::group(['middleware' => ['auth:sanctum', 'is-admin'], 'prefix' => 'admin']
     Route::get('/reservation', [Admin\ReservationController::class, 'index']);
 });
 
-
+Route::get('/get-set-columns', [CarController::class, 'getSetColumns']);
 Route::post('/locations', [Admin\LocationController::class, 'websocket']);

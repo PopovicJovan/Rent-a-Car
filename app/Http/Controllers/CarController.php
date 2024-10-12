@@ -68,4 +68,23 @@ class CarController extends Controller
             ]
         ]);
     }
+
+    public function getSetColumns()
+    {
+        $brands = Car::distinct()->pluck('brand');
+        $types = Car::distinct()->pluck('type');
+        $gears = Car::distinct()->pluck('gear');
+        $fuelTypes = Car::distinct()->pluck('fuelType');
+        $passengers = Car::distinct()->pluck('passengers');
+
+        return response()->json([
+            "data" => [
+                "brands" => $brands,
+                "types" => $types,
+                "gears" => $gears,
+                "fuelTypes" => $fuelTypes,
+                "passengers" => $passengers
+            ]
+        ], 200);
+    }
 }
