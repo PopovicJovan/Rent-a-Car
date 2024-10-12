@@ -30,7 +30,7 @@ class CreateCarRequest extends FormRequest
             'description' => 'required|string',
             'fuelType' => 'required|string',
             'status' => ['sometimes', 'string', Rule::in([Car::AVAILABLE, Car::RESERVED, Car::UNUSABLE])],
-            'image' => 'required|image',
+            'image' => 'sometimes|image',
             'gear' => 'required|string',
             'fuelConsumption' => 'required|int',
             'passengers' => 'required|int'

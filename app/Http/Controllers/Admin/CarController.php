@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Car\CreateCarRequest;
 use App\Http\Requests\Car\UpdateCarRequest;
 use App\Models\Car;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class CarController extends Controller
@@ -51,8 +50,10 @@ class CarController extends Controller
     public function destroy(Car $car)
     {
         $path = "images/cars/$car->image.jpg";
-        if(Storage::disk('public')->exists($path))
-            Storage::disk('public')->delete($path);
+        if($car->image != "abc") {
+            if(Storage::disk('public')->exists($path))
+                Storage::disk('public')->delete($path);
+        }
         $car->delete();
         return response()->json([], 204);
     }
@@ -76,8 +77,10 @@ class CarController extends Controller
       ]);
       if($request->hasFile('image')){
           $path = "images/cars/$car->image.jpg";
-          if(Storage::disk('public')->exists($path))
-              Storage::disk('public')->delete($path);
+          if($car->image != "abc"){
+              if(Storage::disk('public')->exists($path))
+                  Storage::disk('public')->delete($path);
+          }
 
           $image = $request->file('image');
           $image->storeAs('images/cars', "$car->image.jpg", 'public');

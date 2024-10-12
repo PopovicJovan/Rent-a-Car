@@ -18,7 +18,7 @@ class ReservationController extends Controller
      */
     public function index()
     {
-        $reservations = Reservation::all();
+        $reservations = Reservation::with('rate')->get();
         $reservations = ReservationResource::collection($reservations);
         return response()->json([
             "data" => $reservations
@@ -33,7 +33,7 @@ class ReservationController extends Controller
      */
     public function getReservationsForUser(User $user)
     {
-        $reservations = $user->reservations()->get();
+        $reservations = $user->reservations()->with('rate')->get();
         $reservations = ReservationResource::collection($reservations);
         return response()->json([
             "data" => $reservations
