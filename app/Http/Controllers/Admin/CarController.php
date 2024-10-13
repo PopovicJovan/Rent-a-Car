@@ -83,7 +83,9 @@ class CarController extends Controller
           }
 
           $image = $request->file('image');
-          $image->storeAs('images/cars', "$car->image.jpg", 'public');
+          $id = uniqid('car_', true);
+          $image->storeAs('images/cars', "$id.jpg", 'public');
+          $car->image = $id;
           $car->save();
       }
       $car->update($parameters);
