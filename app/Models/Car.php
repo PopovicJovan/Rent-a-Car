@@ -56,7 +56,7 @@ class Car extends Model
             $q->where('fuelType', $fuelType);
         })->whereBetween('price',[$minPrice, $maxPrice])
           ->when($brand, function ($q) use ($brand){
-                $q->where('brand', $brand.'%');
+                $q->where('brand', 'like', $brand.'%');
             });
     }
 
