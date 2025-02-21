@@ -1,5 +1,3 @@
-# Laravel API
-
 # Rent a Car API (Laravel)
 
 ## Project Overview
