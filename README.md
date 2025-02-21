@@ -1,6 +1,83 @@
 # Laravel API
 
-This is a Laravel-based API for rent-a-car application
+# Rent a Car API (Laravel)
+
+## Project Overview
+This project was developed as the final project of the Cortex Academy for high school students. It is a REST API built using the Laravel framework for managing a rent-a-car system. The API allows users to register, browse, and book vehicles, while administrators have additional privileges to manage users, vehicles, and reservations. Authentication is implemented using **Laravel Sanctum**.
+
+## Technologies
+- **Laravel** (PHP framework)
+- **Laravel Sanctum** (Token-based authentication)
+- **MySQL** (Database management)
+- **Eloquent ORM** (Database interaction)
+- **RESTful architecture**
+- **WebSocket** (Real-time vehicle tracking simulation)
+- **Mail Server Integration**
+
+---
+
+## API Features
+
+### 🔹 **Users**
+- **Registration and Authentication**
+  - `POST /register` – Create a new user account
+  - `POST /login` – Log in and receive an authentication token
+  - `POST /logout` – Log out the user (requires authentication)
+- **Profile Management**
+  - `GET /show-profile` – View user profile
+  - `POST /update-profile` – Update user profile
+  - `POST /change-password` – Change password
+  - `POST /forgot-password` – Send password reset token
+  - `POST /reset-password` – Reset password
+
+### 🚗 **Vehicles**
+- `GET /car` – Retrieve a list of available vehicles
+- `GET /car/{id}` – View details of a specific vehicle
+- `POST /car/{car}/is-available` – Check vehicle availability
+
+### 📅 **Reservations**
+- `POST /reservation` – Create a new reservation
+- `GET /reservation` – View user's reservations
+- `DELETE /reservation/{id}` – Cancel a reservation
+- `POST /car/{car}/reservation/get-price` – Calculate reservation price
+- **Invoice Emails**: Users receive invoices via email upon successful reservation.
+
+### ⭐ **Ratings**
+- `POST /reservation/{reservation}/rate` – Rate a reservation
+- `GET /car/{car}/rate` – View all ratings for a specific vehicle
+
+---
+
+## 🛠 **Administrative Features** (requires **is-admin** middleware)
+
+### 👥 **User Management**
+- `GET /admin/user` – View all users
+- `DELETE /admin/user/{id}` – Ban a user
+- `GET /admin/user/{user}/reservation` – View user's reservations
+
+### 🚗 **Vehicle Management**
+- `POST /admin/car` – Add a new vehicle
+- `DELETE /admin/car/{id}` – Delete a vehicle
+- `POST /admin/car/{car}` – Update vehicle details
+
+### 📅 **Reservation Management**
+- `GET /admin/reservation` – View all reservations
+
+---
+
+## 🔐 **Authentication & Route Protection**
+- Most user functionalities require **auth:sanctum** middleware.
+- Admin routes additionally require **is-admin** middleware.
+- The system uses **token-based authentication** with Laravel Sanctum.
+
+---
+
+## 📌 **Additional Notes**
+- The project supports real-time communication using WebSocket to simulate vehicle tracking.
+- The API follows RESTful standards.
+- The mail server is integrated to send invoices to users after booking a vehicle.
+
+---
 
 ## Requirements
 
